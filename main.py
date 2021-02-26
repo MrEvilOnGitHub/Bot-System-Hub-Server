@@ -10,7 +10,6 @@ app.config['DEBUG'] = True
 db_connector = sqlite3.connect("data.db")
 db_cursor = db_connector.cursor()
 
-@app.route('/', methods=['GET'])
-def main_page():
-    a = "placeholder"
-    return a
+@app.route('/')
+def root():
+    return app.send_static_file("static_html_pages/index.html")
