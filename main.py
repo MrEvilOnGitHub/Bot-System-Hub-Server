@@ -12,4 +12,5 @@ db_cursor = db_connector.cursor()
 
 @app.route('/')
 def root():
-    return app.send_static_file("static_html_pages/index.html")
+    message = "Working"
+    return flask.render_template('index.html', message=message)
