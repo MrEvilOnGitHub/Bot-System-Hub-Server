@@ -2,21 +2,23 @@
 - Type: SQLite3 (b/c easier to just import to python, no extra server needed)
 
 ## Tables
-### Subs
-- Internal UID
-- Twitch-ID (Empty if from YT)
-- Youtube-ID (Empty if from Twitch)
-- Start of Subscription
-- Streak in Months
-- Level (1/2/3 if from Twitch, always 1 if from Youtube)
-### General Users
-- UID
-- Registered Name
-- Registered E-Mail
-- PW-Hash or some other safe way of storing a password
-- Twitch-ID (if linked)
-- Youtube-ID (if linked)
-- Discord-ID (if linked)
+### Users
+- id (primary, int, not null)
+- name (text)
+- mail (text)
+- pw (text)
+
+### IDs
+- user (foreign key -> users.id, int not null)
+- twitch (int)
+- youtube (text)
+- discord (text)
+
+### subscriptions
+- user (foreign key -> users.id, int not null)
+- date (text, not null) (0 if inactive)
+- streak (int, not null) (0 if inactive)
+- level (int, nut null) (0 if inactive, 1-3 for twitch, 4 yt (this might update in the future))
 
 # API
 ### Read
