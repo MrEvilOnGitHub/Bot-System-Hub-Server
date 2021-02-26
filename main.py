@@ -7,7 +7,7 @@ app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
 # Set up database connection
-db_connector = sqlite3.connect("data.db")
+db_connector = sqlite3.connect("users.db")
 db_cursor = db_connector.cursor()
 
 @app.route('/')
