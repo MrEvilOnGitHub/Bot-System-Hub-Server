@@ -9,7 +9,7 @@ app.config['DEBUG'] = True
 
 # Set up database connection
 USER_DB_PATH = './users.testing.db'
-def get_db() -> sqlite3.Connection:
+def getDB() -> sqlite3.Connection:
     db = getattr(flask.g, '_database', None)
     if db is None:
         db = flask.g._database = sqlite3.connect(USER_DB_PATH)
@@ -36,7 +36,7 @@ def root():
 # THIS IS DANGEROUS, REMOVE BEFORE GOING LIVE
 @app.route('/readall', methods=['GET'])
 def read_all():
-    cursor = get_db().cursor()
+    cursor = getDB().cursor()
     data = []
     if 'id' in flask.request.args:
         for i in cursor.execute('SELECT * FROM users WHERE id = ?',flask.request.args['id']):
@@ -83,12 +83,24 @@ def read_all():
 Headers (-H in curl) are available to read as a tupple in flask.request.headers. The specifics are [(key, value),(key2, value2)]
 the data is just strings
 """
-@app.route('/api/alpha/newsub', methods=['GET'])
+@app.route('/api/alpha/set/newsub', methods=['GET'])
 def newsub():
     data = set(flask.request.headers)
-    useful_data = []
+    usefulData = []
     for i in data:
-        if i[0] is "id" or "lvl":
-            useful_data.append(i)
+        if i[0] == "id" or "lvl":
+            usefulData.append(i)
     if len(USER_DB_PATH) != 2:
         flask.abort(400)
+
+@app.route('/api/alpha/get/bannedWords', methods=['GET'])
+def getBannedWords():
+    with open("banned.txt") as handler:
+        data = handler.readlines()
+        for i in data:
+            key = data.index(i)
+            if '\n' in i:
+                print("yes")
+                i = i[:-1]
+                data[key] = i
+        return flask.jsonify(data)
