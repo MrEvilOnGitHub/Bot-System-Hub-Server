@@ -31,5 +31,9 @@
 - Auth key (string, primary key, not null)
 - permissions(int, not null) (saved in "binary", aka each permision is represented by a single number in the big integer)
 
+## Permissions
+- All read
+- All write
+
 # Public Website
 - TBD
