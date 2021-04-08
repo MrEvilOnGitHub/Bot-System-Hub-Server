@@ -90,8 +90,11 @@ def newsub():
     for i in data:
         if i[0] == "id" or "lvl":
             usefulData.append(i)
-    if len(USER_DB_PATH) != 2:
+    if len(usefulData) != 2:
         flask.abort(400)
+    flask.abort(501) # Abort with Not implemented status code
+    # And yes, I do want the data processing to be done before aborting
+    # Reason is that I can still check if the data we need is existent and send a different error code if so
 
 @app.route('/api/alpha/get/bannedWords', methods=['GET'])
 def getBannedWords():

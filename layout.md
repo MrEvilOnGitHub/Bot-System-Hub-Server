@@ -18,14 +18,14 @@
 - user (foreign key -> users.id, int not null)
 - date (text, not null) (0 if inactive)
 - streak (int, not null) (0 if inactive)
-- level (int, nut null) (0 if inactive, 1-3 for twitch, 4 yt (this might update in the future))
+- level (int, not null) (0 if inactive, 1-3 for twitch, 4 Twitch-Prime, 5 YT (this might update in the future))
 
 # API
 ## Operations
 ### Read
-- TBD
+- Banned words list
 ### Write
-- TBD
+- new subscriptions (not yet implemented)
 
 ## DB
 - Auth key (string, primary key, not null)
