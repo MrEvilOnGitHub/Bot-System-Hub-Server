@@ -106,4 +106,5 @@ def getBannedWords():
                 print("yes")
                 i = i[:-1]
                 data[key] = i
+        handler.close()
         return flask.jsonify(data)
