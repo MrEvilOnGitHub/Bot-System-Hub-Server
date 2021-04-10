@@ -2,13 +2,13 @@
 - Type: SQLite3 (b/c easier to just import to python, no extra server needed)
 
 ## Tables
-### Users
+### users
 - id (primary, int, not null)
 - name (text)
 - mail (text)
 - pw (text)
 
-### IDs
+### ids
 - user (foreign key -> users.id, int not null)
 - twitch (int)
 - youtube (text)

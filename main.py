@@ -22,6 +22,18 @@ def sanitize(string: str) -> str:
             string.replace(i, f'\\{i}')
     return string
 
+def doesUserExistInDB(id) -> bool:
+    db = sqlite3.connect(USER_DB_PATH)
+    cursor = db.cursor()
+    cursor.execute('SELECT * FROM users WHERE id=?', id)
+    stored = cursor.fetchall()
+    cursor.close()
+    db.close()
+    if stored is not None:
+        return True
+    else:
+        return False
+
 @app.teardown_appcontext
 def close_connection(exception) -> None:
     db = getattr(flask.g, '_database', None)
@@ -86,12 +98,26 @@ the data is just strings
 @app.route('/api/alpha/set/newsub', methods=['GET'])
 def newsub():
     data = set(flask.request.headers)
-    usefulData = []
+    usefulData = {}
     for i in data:
-        if i[0] == "id" or "lvl":
-            usefulData.append(i)
-    if len(usefulData) != 2:
+        if i[0] == "id":
+            usefulData["id"] = i[1]
+        elif i[0] == "lvl":
+            usefulData["lvl"] = i[1]
+        elif i[0] == "platform":
+            if i[1].lower() == "youtube" or "yt":
+                usefulData["platform"] = "youtube"
+            elif i[1].lower() == "twitch":
+                usefulData["platform"] = i[1].lower()
+    if len(usefulData) != 3:
         flask.abort(400)
+    cursor = getDB().cursor()
+    cursor.execute('SELECT * FROM ids WHERE ? = ?', (usefulData["platform"], usefulData["id"]))
+    obj = cursor.fetchall()
+    if obj is None:
+        newID = random.randint(1,10000000)
+        cursor.execute('INSERT INTO users VALUES(?, ?, ?, ?)', (newID, "plac3h0!der", "plac3h0!der@plac3h0!der.plac3h0!der", "plac3h0!der"))
+        cursor.execute(f'INSERT INTO ids (user, {usefulData["platform"]}) VALUES(?, ?)',(newID, usefulData["id"]))
     flask.abort(501) # Abort with Not implemented status code
     # And yes, I do want the data processing to be done before aborting
     # Reason is that I can still check if the data we need is existent and send a different error code if so
