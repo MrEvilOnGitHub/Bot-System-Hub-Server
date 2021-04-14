@@ -113,9 +113,13 @@ def newsub():
         flask.abort(400)
     cursor = getDB().cursor()
     cursor.execute('SELECT * FROM ids WHERE ? = ?', (usefulData["platform"], usefulData["id"]))
-    obj = cursor.fetchall()
+    obj = cursor.fetchall() # Will be none if no user exists
     if obj is None:
-        newID = random.randint(1,10000000)
+        duplicateID = True
+        while duplicateID:
+            newID = random.randint(1,10000000)
+            if not doesUserExistInDB(newID):
+                duplicateID = False
         cursor.execute('INSERT INTO users VALUES(?, ?, ?, ?)', (newID, "plac3h0!der", "plac3h0!der@plac3h0!der.plac3h0!der", "plac3h0!der"))
         cursor.execute(f'INSERT INTO ids (user, {usefulData["platform"]}) VALUES(?, ?)',(newID, usefulData["id"]))
     flask.abort(501) # Abort with Not implemented status code
