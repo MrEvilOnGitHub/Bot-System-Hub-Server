@@ -9,6 +9,8 @@ app.config['DEBUG'] = True
 
 # Set up database connection
 USER_DB_PATH = './users.testing.db'
+
+
 def getDB() -> sqlite3.Connection:
     db = getattr(flask.g, '_database', None)
     if db is None:
